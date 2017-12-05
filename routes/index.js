@@ -10,10 +10,14 @@ router.get('/', function(req, res, next) {
     bearer_token: process.env.TWITTER_BEARER_TOKEN
   });
 
-  client.get('search/tweets', {q: 'trump'}, function(error, tweet, response) {
+  var search = `#${req.query.search}`;
+
+  client.get('search/tweets', { q: search }, function(error, tweet, response) {
     if (error) throw error;
-    var tweets = tweet.statuses.map(x => x.text);
-    console.log(tweets);
+    console.log(Object.keys(tweet.search_metadata));
+    console.log(tweet.search_metadata.count);
+    // var tweets = tweet.statuses.map(x => x.text);
+    // console.log(tweets);
   });
 
   res.render('index', { title: 'Express' });
