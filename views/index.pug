@@ -3,6 +3,7 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+  p #{search} was tweeted #{count} times.
   form(method="get")
     input(type="text" name="search")
     input(type="submit" value="Submit")
