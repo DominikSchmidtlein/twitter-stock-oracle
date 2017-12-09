@@ -15,7 +15,10 @@ var client = new Twitter({
 /* GET home page. */
 
 router.get('/', function(req, res, next) {
-  var search = `${req.query.search}`;
+  var search = req.query.search;
+  if (search == undefined) {
+    return res.render('index', { search: '' });
+  }
 
   // search company stock symbol
   request({
@@ -23,10 +26,14 @@ router.get('/', function(req, res, next) {
     qs: { query: search, region: 1, lang: 'en' }
   }, function(error, response, body) {
     if (error) throw error;
-    var symbol = JSON.parse(body).ResultSet.Result[0].symbol;
+    let result = JSON.parse(body).ResultSet.Result;
+    if (!result.length) {
+      return res.render('index', { search });
+    }
+    var symbol = result[0].symbol;
     let q = search + " filter:verified";
 
-    // search user by input query
+    // search twitter account by input query
     client.get('users/search', { q, count: 5 }, function(error, body, response) {
       if (error) throw error;
       let t_account = body.reduce((a, b) => a.followers_count > b.followers_count ? a : b);

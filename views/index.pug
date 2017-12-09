@@ -6,8 +6,11 @@ block content
   form(method="get")
     input(type="text" name="search" value=search)
     input(type="submit" value="Submit")
-  p Symbol: #{symbol}
-  p Company: #{company}
-  p Twitter Handle: @#{handle}
-  p Total Tweets: #{count}
+  if symbol
+    p Symbol: #{symbol}
+    p Company: #{company}
+    p Twitter Handle: @#{handle}
+    p Total Tweets: #{count}
+  else
+    p "#{search}" was not recognized as a company
   
