@@ -1,10 +1,13 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
-  p #{search} was tweeted #{count} times.
+  h1 Twitter Stock Oracle
+  p Welcome to Twitter Stock Oracle
   form(method="get")
-    input(type="text" name="search")
+    input(type="text" name="search" value=search)
     input(type="submit" value="Submit")
+  p Symbol: #{symbol}
+  p Company: #{company}
+  p Twitter Handle: @#{handle}
+  p Total Tweets: #{count}
   
