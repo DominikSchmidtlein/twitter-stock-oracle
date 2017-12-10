@@ -11,6 +11,13 @@ block content
     p Company: #{company}
     p Twitter Handle: @#{handle}
     p Total Tweets: #{count}
+    h2 Breakdown
+    ul
+      each day in dates
+        li= day.date
+          ul
+            li Tweets: #{day.tweet_count}
+            li Volume: #{day.trading_volume}
   else
     p "#{search}" was not recognized as a company
   
