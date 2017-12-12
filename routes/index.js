@@ -17,12 +17,15 @@ var client = new Twitter({
 router.get('/', function(req, res, next) {
   var search = req.query.search;
   if (search == undefined) {
-    return res.render('index', { search: '' });
+    return res.render('index', { search: '', error: 'no search provided' });
   }
   // search twitter account by input query
   let q = search + ' filter:verified';
   client.get('users/search', { q, count: 5 }, function(error, body, response) {
     if (error) throw error;
+    if (!body.length) {
+      return res.render('index', { search, error: 'no twitter account' });
+    }
     let t_account = body.reduce((a, b) => a.followers_count > b.followers_count ? a : b);
     var company = t_account.name;
     var handle = t_account.screen_name;
@@ -37,7 +40,7 @@ router.get('/', function(req, res, next) {
         if (error) throw error;
         let result = JSON.parse(body).ResultSet.Result;
         if (!result.length) {
-          return res.render('index', { search });
+          return res.render('index', { search, error: 'no stock symbol found' });
         }
         var symbol = result[0].symbol;
 
@@ -46,6 +49,9 @@ router.get('/', function(req, res, next) {
           url: `https://api.iextrading.com/1.0/stock/${symbol}/chart`
         }, function(error, response, body) {
           if (error) throw error;
+          if (response.statusCode == 404) {
+            return res.render('index', { search, error: 'no stock data available' });
+          }
           let json = JSON.parse(body);
 
           // get tweet count and stock price for past week
