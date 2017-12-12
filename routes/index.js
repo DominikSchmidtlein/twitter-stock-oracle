@@ -22,7 +22,6 @@ router.get('/', function(req, res, next) {
   // search twitter account by input query
   let q = search + ' filter:verified';
   client.get('users/search', { q, count: 5 }, function(error, body, response) {
-    console.log(error);
     if (error) throw error;
     if (!body.length) {
       return res.render('index', { search, error: 'no twitter account' });
